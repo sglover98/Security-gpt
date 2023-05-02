@@ -1,66 +1,60 @@
-import os 
-from apikey import apikey
 
-import streamlit as st
+# Bring in deps
+import os 
+from apikey import apikey 
+
+import streamlit as st 
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SequentialChain
+from langchain.chains import LLMChain, SequentialChain 
 from langchain.memory import ConversationBufferMemory
+from langchain.utilities import WikipediaAPIWrapper 
 
 
-os.environ["OPENAI_API_KEY"] = apikey
+os.environ['OPENAI_API_KEY'] = apikey
 
+# App framework
+st.title('🦜🔗 Security GPT')
+prompt = st.text_input('Plug in your prompt here and lets get secure') 
 
-
-
-#App framework
-st.title("Security GPT🦜️🔗")
-prompt = st.text_input("Enter a prompt: Start by listing the technology you are using.")
-
-
-
-#Prompt templates
-title_template = PromptTemplate(
-    input_variables= ["technology"],
-    template = "I am using {technology} will these work well together from a security aspect."
+# Prompt templates
+discovery_template = PromptTemplate(
+    input_variables = ['technology'], 
+    template="I am using {technology} will these work well together from a security aspect."
 )
 
-sec_template = PromptTemplate(
-    input_variables=['high_lvl'],
-    template="Give me a detailed list of 5 high level suggestions to secure the for each of the technologies mentioned {high_lvl}"
+overview_template = PromptTemplate(
+    input_variables = ['overview', 'wikipedia_research'], 
+    template='Provide me 5 best practices for each technology referenced and a list of the most necessary security practices for each technology Overview: {overview} while leveraging this wikipedia research:{wikipedia_research} '
 )
 
+# Memory 
+discovery_memory = ConversationBufferMemory(input_key='technology', memory_key='chat_history')
+overview_memory = ConversationBufferMemory(input_key='overview', memory_key='chat_history')
 
 
-#Memory
-memory = ConversationBufferMemory(input_key="technology", memory_key='chat_memory')
+# Llms
+llm = OpenAI(temperature=0.9) 
+discovery_chain = LLMChain(llm=llm, prompt=discovery_template, verbose=True, output_key='tech', memory=discovery_memory)
+overview_chain = LLMChain(llm=llm, prompt=overview_template, verbose=True, output_key='ovr', memory=overview_memory)
+
+wiki = WikipediaAPIWrapper()
 
 
-#LLM
-llm = OpenAI(temperature=0.9)
-title_chain= LLMChain(llm=llm, prompt=title_template, verbose=True, output_key="tech", memory=memory)
-sec_chain= LLMChain(llm=llm, prompt=sec_template, verbose=True, output_key="high_lvl_")
+# Show stuff to the screen if there's a prompt
+if prompt: 
+    discovery = discovery_chain.run(prompt)
+    wiki_research = wiki.run(prompt) 
+    overview = overview_chain.run(discovery=discovery, wikipedia_research=wiki_research, overview=prompt)
 
-sequential_chain = SequentialChain(chains=[title_chain, sec_chain], input_variables=['technology',"high_lvl"],output_variables=['tech','high_lvl_'] ,verbose=True)
+    st.write(discovery) 
+    st.write(overview) 
 
+    with st.expander('Technology Discovery History'): 
+        st.info(discovery_memory.buffer)
 
+    with st.expander('Overview History'): 
+        st.info(overview_memory.buffer)
 
-
-
-
-
-#Show stuff to screen if there is a prompt
-if prompt:
-    response = sequential_chain({"technology":prompt, "high_lvl":prompt})
-    st.write(response['tech'])
-    st.write(response["high_lvl_"])
-    
-    
-    with st.expander('Message History'):
-        st.info(memory.buffer)
-
-
-
-
-
-
+    with st.expander('Wikipedia Research'): 
+        st.info(wiki_research)
