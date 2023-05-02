@@ -1,0 +1,8 @@
+{
+    "python.analysis.extraPaths": [
+        "./security-gpt/App framework",
+        "./security-gpt/App framework",
+        "./security-gpt",
+        "./security-gpt"
+    ]
+}

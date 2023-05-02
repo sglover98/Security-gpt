@@ -1,8 +1,7 @@
-
 # Bring in deps
 import os 
+from app import framework
 from apikey import apikey 
-
 import streamlit as st 
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
@@ -10,17 +9,24 @@ from langchain.chains import LLMChain, SequentialChain
 from langchain.memory import ConversationBufferMemory
 from langchain.utilities import WikipediaAPIWrapper 
 
+#module imports
+import sys
+sys.path.insert(0,'security-gpt/app/framework.py')
 
+
+
+#import apikey
 os.environ['OPENAI_API_KEY'] = apikey
 
 # App framework
-st.title('🦜🔗 Security GPT')
-prompt = st.text_input('Plug in your prompt here and lets get secure') 
+framework.title()
+prompt=framework.input_bar()
+
 
 # Prompt templates
 discovery_template = PromptTemplate(
     input_variables = ['technology'], 
-    template="I am using {technology} will these work well together from a security aspect."
+    template="I am using {technology} will these work well together from a security aspect would you swap out any of the other technologies to have more optimal security solution."
 )
 
 overview_template = PromptTemplate(
