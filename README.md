@@ -17,3 +17,8 @@ Security-GPT is a tool that utilizes the OPENAI api to provide your own personal
 4. Generate and Insert Openai key inside of quotes (Follow link https://platform.openai.com/account/api-keys)
 5. Save apikey.pi
 3. Input into terminal***** stearmlit run main.py
+
+# Change Log
+Added temporary memory to store output of query. (May 04, 2023)
+Added .env-sample file with instructions. (May 04, 2023)
+Added Wikipedia API (May 04, 2023)
