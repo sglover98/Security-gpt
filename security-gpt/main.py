@@ -1,13 +1,17 @@
 # Bring in deps
 import os 
 from app import framework
-from apikey import apikey 
+import pinecone
+from apikey import apikey
 import streamlit as st 
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SequentialChain 
+from langchain.chains import LLMChain 
+from langchain.vectorstores import pinecone
 from langchain.memory import ConversationBufferMemory
 from langchain.utilities import WikipediaAPIWrapper 
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.embeddings import OpenAIEmbeddings
 
 #module imports
 import sys
@@ -64,3 +68,16 @@ if prompt:
 
     with st.expander('Wikipedia Research'): 
         st.info(wiki_research)
+
+# vector store
+#text_splitter = RecursiveCharacterTextSplitter(
+#    chunk_size=100,
+#    chunk_overlap=0,
+#)
+
+#texts = text_splitter.create_documents([prompt])
+
+
+# embeddings
+#embeddings = OpenAIEmbeddings(model='ada')
+#query_results = embeddings.query(texts, texts, n=5)

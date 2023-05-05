@@ -1,1 +1,4 @@
-apikey = "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"
+import os
+#Do not change
+apikey = os.environ.get('OPENAI_API')
+pinecone_apikey = os.environ.get('PINECONE_API')

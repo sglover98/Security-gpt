@@ -11,7 +11,7 @@ Security-GPT is a tool that utilizes the OPENAI api to provide your own personal
 
 # Install 
 
-1. pip install streamlit langchain openai wikipedia chromadb tiktoken
+1. pip install streamlit langchain openai wikipedia chromadb tiktoken pinecone
 2. cd security-gpt 
 3. open apikey.py
 4. Generate and Insert Openai key inside of quotes (Follow link https://platform.openai.com/account/api-keys)
