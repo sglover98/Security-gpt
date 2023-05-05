@@ -18,7 +18,12 @@ Security-GPT is a tool that utilizes the OPENAI api to provide your own personal
 5. Save apikey.pi
 3. Input into terminal***** stearmlit run main.py
 
+#Future Changes
+-Implementing vector database using Pincone.
+-Add prompt template switches to allow for more flexability.
+-Figure out controls annonymize input data.
+
 # Change Log
-Added temporary memory to store output of query. (May 04, 2023)
-Added .env-sample file with instructions. (May 04, 2023)
-Added Wikipedia API (May 04, 2023)
+- Added temporary memory to store output of query. (May 04, 2023)
+- Added .env-sample file with instructions. (May 04, 2023)
+- Added Wikipedia API (May 04, 2023)
